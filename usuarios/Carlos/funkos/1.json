@@ -1,12 +1,12 @@
 {
   "id": 1,
-  "name": "batman",
-  "description": "héroe de DC",
+  "name": "Batman",
+  "description": "Héroe de DC",
   "type": "Pop!",
   "genre": "Películas y TV",
   "franchise": "DC",
   "number": 10,
   "exclusive": true,
-  "specialFeatures": "Edición Limitada",
-  "marketValue": 19.19
+  "specialFeatures": "Edición limitada",
+  "marketValue": 19.99
 }

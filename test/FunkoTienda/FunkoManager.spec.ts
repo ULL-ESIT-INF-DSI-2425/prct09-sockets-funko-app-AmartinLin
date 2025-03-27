@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterAll} from 'vitest';
 import { Funko, FunkoGenre, FunkoType } from '../../src/FunkoTienda/Funko.js';
 import { FunkoManager } from '../../src/FunkoTienda/FunkoManager.js';
 import fs from 'fs';
@@ -7,8 +7,8 @@ import path from 'path';
 
 describe('FunkoManager', () => {
   const testUser = 'TestUser';
-  const testDir = path.join(__dirname, 'users', testUser);
-  const testManager = new FunkoManager(testUser, testDir);
+  const testDir = "/home/usuario/DSI/prct09-sockets-funko-app-AmartinLin/usuarios/TestUser/funkos";
+  const testManager = new FunkoManager(testUser);
 
   beforeEach(() => {
     // Crear directorio de prueba antes de cada prueba
@@ -17,9 +17,9 @@ describe('FunkoManager', () => {
     }
   });
 
-  afterEach(() => {
+  afterAll(() => {
     // Limpiar el directorio después de cada prueba
-    fs.rmSync(testDir, { recursive: true, force: true });
+    fs.rmSync("/home/usuario/DSI/prct09-sockets-funko-app-AmartinLin/usuarios/TestUser", { recursive: true, force: true });
   });
 
   it('debería añadir un Funko', () => {

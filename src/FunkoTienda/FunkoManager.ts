@@ -52,7 +52,7 @@ export class FunkoManager {
       console.log(chalk.red('Error: No se encontró el Funko con ID ' + funko.id + '.'));
       return false;
     }
-    fs.writeFileSync(this.userDir, JSON.stringify(funko.toJSON(), null, 2));
+    fs.writeFileSync(filePath, JSON.stringify(funko.toJSON(), null, 2));
     console.log(chalk.green('Funko ' + funko.name + ' actualizado con éxito.'));
     return true;
   }
