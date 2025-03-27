@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import net from "net";
 import readline from "readline";
 
@@ -7,7 +8,7 @@ const rl = readline.createInterface({
 });
 
 const client = net.createConnection({ port: 60300, host: "127.0.0.1" }, () => {
-  console.log("Conectado al servidor Funko.");
+  console.log(chalk.blue("Conectado al servidor Funko."));
 });
 
 client.on("data", (data) => {

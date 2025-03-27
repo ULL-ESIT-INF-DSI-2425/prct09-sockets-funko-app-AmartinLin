@@ -50,7 +50,7 @@ export function executeCommand(
     case "list":
       { const funkos = manager.getAllFunkos();
       response = funkos.length
-        ? `Funkos de ${username}:\n${funkos.map((f) => JSON.stringify(f)).join("\n")}`
+        ? `Funkos de ${username}:\n${funkos.map((f) => JSON.stringify(f)).join("\n\n")}`
         : "No hay Funkos registrados.";
       break; }
 
