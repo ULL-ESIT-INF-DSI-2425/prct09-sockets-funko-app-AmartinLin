@@ -7,7 +7,7 @@ import path from 'path';
 
 describe('FunkoManager', () => {
   const testUser = 'TestUser';
-  const testDir = "/home/usuario/DSI/prct09-sockets-funko-app-AmartinLin/usuarios/TestUser/funkos";
+  const testDir = "./usuarios/TestUser/funkos";
   const testManager = new FunkoManager(testUser);
 
   // beforeEach(() => {
@@ -18,7 +18,7 @@ describe('FunkoManager', () => {
   // });
 
   afterAll(() => {
-    const funkoDir = "/home/usuario/DSI/prct09-sockets-funko-app-AmartinLin/usuarios/TestUser/funkos/";
+    const funkoDir = "./usuarios/TestUser/funkos/";
   
     if (fs.existsSync(funkoDir)) {
       fs.readdirSync(funkoDir).forEach(file => {
