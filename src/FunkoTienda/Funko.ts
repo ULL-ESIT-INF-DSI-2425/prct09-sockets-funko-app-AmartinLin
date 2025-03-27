@@ -27,7 +27,6 @@ export interface FunkoData {
   marketValue: number;
 }
 
-// Clase Funko
 export class Funko {
   constructor(
     public id: number,

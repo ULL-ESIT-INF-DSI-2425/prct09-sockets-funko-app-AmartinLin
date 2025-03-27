@@ -12,6 +12,7 @@
     "testpract7": "vitest run test/practica7modi",
     "coverage": "vitest run --coverage"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ULL-ESIT-INF-DSI-2425/prct09-sockets-funko-app-AmartinLin.git"
@@ -25,6 +26,8 @@
   "homepage": "https://github.com/ULL-ESIT-INF-DSI-2425/prct09-sockets-funko-app-AmartinLin#readme",
   "devDependencies": {
     "@eslint/js": "^9.23.0",
+    "@types/node": "^22.13.14",
+    "@types/yargs": "^17.0.33",
     "@vitest/coverage-v8": "^3.0.9",
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
@@ -36,5 +39,9 @@
     "typescript-eslint": "^8.28.0",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.9"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "yargs": "^17.7.2"
   }
 }
