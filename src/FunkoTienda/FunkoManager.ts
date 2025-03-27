@@ -19,7 +19,8 @@ export class FunkoManager {
   // }
 
   constructor(private username: string) {
-    this.userDir = path.join("/home/usuario/DSI/prct09-sockets-funko-app-AmartinLin/usuarios", this.username, "funkos");
+    //this.userDir = path.join("/home/usuario/DSI/prct09-sockets-funko-app-AmartinLin/usuarios", this.username, "funkos");
+    this.userDir = path.join("/tmp", "usuarios", this.username, "funkos");
     if (!fs.existsSync(this.userDir)) {
       fs.mkdirSync(this.userDir, { recursive: true });
     }

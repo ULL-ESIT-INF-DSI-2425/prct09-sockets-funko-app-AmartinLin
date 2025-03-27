@@ -7,7 +7,7 @@ import path from 'path';
 
 describe('FunkoManager', () => {
   const testUser = 'TestUser';
-  const testDir = "./usuarios/TestUser/funkos";
+  const testDir = path.join("/tmp", "usuarios", testUser, "funkos"); //"./usuarios/TestUser/funkos";
   const testManager = new FunkoManager(testUser);
 
   // beforeEach(() => {
@@ -18,11 +18,10 @@ describe('FunkoManager', () => {
   // });
 
   afterAll(() => {
-    const funkoDir = "./usuarios/TestUser/funkos/";
   
-    if (fs.existsSync(funkoDir)) {
-      fs.readdirSync(funkoDir).forEach(file => {
-        const filePath = path.join(funkoDir, file);
+    if (fs.existsSync(testDir)) {
+      fs.readdirSync(testDir).forEach(file => {
+        const filePath = path.join(testDir, file);
         fs.unlinkSync(filePath); // Elimina cada archivo dentro del directorio
       });
     }
