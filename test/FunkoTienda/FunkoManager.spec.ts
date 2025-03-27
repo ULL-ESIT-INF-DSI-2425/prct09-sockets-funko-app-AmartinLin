@@ -18,8 +18,14 @@ describe('FunkoManager', () => {
   // });
 
   afterAll(() => {
-    // Limpiar el directorio después de cada prueba
-    fs.rmSync("/home/usuario/DSI/prct09-sockets-funko-app-AmartinLin/usuarios/TestUser", { recursive: true, force: true });
+    const funkoDir = "/home/usuario/DSI/prct09-sockets-funko-app-AmartinLin/usuarios/TestUser/funkos/";
+  
+    if (fs.existsSync(funkoDir)) {
+      fs.readdirSync(funkoDir).forEach(file => {
+        const filePath = path.join(funkoDir, file);
+        fs.unlinkSync(filePath); // Elimina cada archivo dentro del directorio
+      });
+    }
   });
 
   it('debería añadir un Funko', () => {
