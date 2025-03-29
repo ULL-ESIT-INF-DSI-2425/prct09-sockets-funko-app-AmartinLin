@@ -4,7 +4,7 @@ import { hideBin } from "yargs/helpers";
 import net from "net";
 import chalk from "chalk";
 
-function sendCommand(command: string, callback: (respuesta: string) => void) {
+export function sendCommand(command: string, callback: (respuesta: string) => void) {
   const client = net.createConnection({ port: 60300 }, () => {
     client.write(command);
   });
