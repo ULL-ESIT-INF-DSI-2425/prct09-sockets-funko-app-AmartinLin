@@ -1,7 +1,45 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { executeCommand } from "./funkoController.js";
+//import { executeCommand } from "./funkoController.js";
+import net from "net";
+import chalk from "chalk";
 
+function sendCommand(command: string, callback: (respuesta: string) => void) {
+  const client = net.createConnection({ port: 60300 }, () => {
+    client.write(command);
+  });
+
+  let wholeData = "";
+
+  client.on("data", (dataChunk) => {
+    wholeData += dataChunk.toString(); // Acumulamos todos los fragmentos
+  });
+
+  client.on("end", () => {
+    // Procesamos el contenido acumulado al final de la conexión
+    try {
+      // Intentamos parsear como JSON
+      const jsonStart = wholeData.indexOf("{");
+      if (jsonStart !== -1) {
+        const jsonData = wholeData.slice(jsonStart).trim(); // Aislamos la parte JSON
+        const message = JSON.parse(jsonData);
+        callback(`${JSON.stringify(message, null, 2)}`); 
+      } else {
+        callback(`${wholeData.trim()}`);
+      }
+    } catch (error) {
+      console.error("Error al procesar la respuesta:", error);
+      console.error("Datos recibidos:", wholeData);
+    }
+  });
+
+  client.on("error", (err) => {
+    console.error(chalk.red("Error en cliente:", err));
+  });
+}
+
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const argv = yargs(hideBin(process.argv))
   .option("user", {
     alias: "u",
@@ -14,16 +52,16 @@ const argv = yargs(hideBin(process.argv))
     "Obtener información de un Funko",
     (yargs) => yargs.positional("id", { type: "number", demandOption: true }),
     (args) => {
-      console.log(executeCommand(args.user, "get", [String(args.id)]));
-    },
+      sendCommand(`get ${args.user} ${args.id}`, (response) => console.log(response));
+    }
   )
   .command<{ user: string; id: number }>(
     "remove <id>",
     "Eliminar un Funko",
     (yargs) => yargs.positional("id", { type: "number", demandOption: true }),
     (args) => {
-      console.log(executeCommand(args.user, "remove", [String(args.id)]));
-    },
+      sendCommand(`remove ${args.user} ${args.id}`, (response) => console.log(response));
+    }
   )
   .command<{
     user: string;
@@ -53,29 +91,19 @@ const argv = yargs(hideBin(process.argv))
         .positional("especial", { type: "string", demandOption: true })
         .positional("valor", { type: "number", demandOption: true }),
     (args) => {
-      console.log(
-        executeCommand(args.user, "add", [
-          String(args.id),
-          args.nombre,
-          args.descripcion,
-          args.tipo,
-          args.genero,
-          args.franquicia,
-          String(args.numero),
-          String(args.exclusivo),
-          args.especial,
-          String(args.valor),
-        ]),
+      sendCommand(
+        `add ${args.user} ${args.id} ${args.nombre} ${args.descripcion} ${args.tipo} ${args.genero} ${args.franquicia} ${args.numero} ${args.exclusivo} ${args.especial} ${args.valor}`,
+        (response) => console.log(response)
       );
-    },
+    }
   )
   .command<{ user: string }>(
     "list",
     "Listar Funkos",
-    (yargs) => yargs, 
+    (yargs) => yargs,
     (args) => {
-      console.log(executeCommand(args.user, "list", []));
-    },
+      sendCommand(`list ${args.user}`, (response) => console.log(response));
+    }
   )
   .demandCommand()
   .help().argv;

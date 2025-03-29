@@ -7,10 +7,12 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
+// Se crea un cliente en el puerto correspondiente
 const client = net.createConnection({ port: 60300, host: "127.0.0.1" }, () => {
   console.log(chalk.blue("Conectado al servidor Funko."));
 });
 
+// Se toman los datos del servidor y se tratan
 client.on("data", (data) => {
   console.log("Servidor:", data.toString());
   if (!data.toString().includes("ingrese su nombre de usuario")) {
@@ -18,6 +20,7 @@ client.on("data", (data) => {
   }
 });
 
+// TODO: eliminar la sección de pedir nombre de usuario
 rl.question("Ingrese su nombre de usuario: ", (username) => {
   client.write(username);
 });

@@ -1,38 +1,38 @@
 import net from "net";
 import { executeCommand } from "./funkoController.js";
-import chalk from "chalk";
 
 const server = net.createServer((socket) => {
   console.log("Cliente conectado.");
 
-  let username = "";
-
-  socket.write(
-    chalk.bold.cyanBright("Bienvenido al servidor Funko. Por favor, ingrese su nombre de usuario:\n"),
-  );
-
   socket.on("data", (data) => {
     const message = data.toString().trim();
+    const [command, user, ...args] = message.split(" ");
 
-    if (!username) {
-      username = message;
-      socket.write(
-        chalk.cyanBright(`Usuario establecido: ${username}. Ahora puedes ingresar comandos.\n`),
-      );
+    if (!command || !user) {
+      socket.write("Comando inválido\n");
       return;
     }
 
-    const [command, ...args] = message.split(" ");
-    const response = executeCommand(username, command, args);
-    socket.write(response + "\n");
+    try {
+      const response = executeCommand(user, command, args);
+      socket.write(response + "\n", () => {
+        socket.end();
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        socket.write(`Error: ${error.message}\n`);
+      } else {
+        socket.write("Error desconocido\n");
+      }
+    }
   });
 
   socket.on("end", () => {
-    console.log(chalk.magenta(`Cliente (${username}) desconectado.`));
+    console.log("Cliente desconectado.");
   });
 
   socket.on("error", (err) => {
-    console.error(chalk.red("Error en el socket:", err));
+    console.error("Error en el servidor:", err);
   });
 });
 

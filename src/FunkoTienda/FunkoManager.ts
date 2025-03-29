@@ -9,36 +9,34 @@ import chalk from "chalk";
 
 export class FunkoManager {
   private userDir: string;
-  // constructor(
-  //   private username: string,
-  //   private userDir: string = path.join(__dirname, "users", this.username),
-  // ) {
-  //   if (!fs.existsSync(this.userDir)) {
-  //     fs.mkdirSync(this.userDir, { recursive: true });
-  //   }
-  // }
 
   constructor(private username: string) {
-    //this.userDir = path.join("/home/usuario/DSI/prct09-sockets-funko-app-AmartinLin/usuarios", this.username, "funkos");
-    this.userDir = path.join("/tmp", "usuarios", this.username, "funkos");
+    this.userDir = path.join(
+      "/home/usuario/DSI/prct09-sockets-funko-app-AmartinLin/usuarios",
+      this.username,
+      "funkos",
+    );
+    //this.userDir = path.join("/tmp", "usuarios", this.username, "funkos"); // Para pasar las pruebas debemos cambiar el directorio a este
     if (!fs.existsSync(this.userDir)) {
       fs.mkdirSync(this.userDir, { recursive: true });
     }
   }
 
   /**
-   * Añade un funko a la colección 
+   * Añade un funko a la colección
    * @param funko - Funko
    * @returns - boolean (true === se ha añadido el funko correctamente)
    */
   addFunko(funko: Funko): boolean {
     const filePath = this.getFunkoFilePath(funko.id);
     if (fs.existsSync(filePath)) {
-      console.log(chalk.red('Error: El Funko con ID ' + funko.id + ' ya existe.'));
+      console.log(
+        chalk.red("Error: El Funko con ID " + funko.id + " ya existe."),
+      );
       return false;
     }
     fs.writeFileSync(filePath, JSON.stringify(funko.toJSON(), null, 2));
-    console.log(chalk.green('Funko ' + funko.name + ' añadido con éxito.'));
+    console.log(chalk.green("Funko " + funko.name + " añadido con éxito."));
     return true;
   }
 
@@ -50,11 +48,13 @@ export class FunkoManager {
   updateFunko(funko: Funko): boolean {
     const filePath = this.getFunkoFilePath(funko.id);
     if (!fs.existsSync(filePath)) {
-      console.log(chalk.red('Error: No se encontró el Funko con ID ' + funko.id + '.'));
+      console.log(
+        chalk.red("Error: No se encontró el Funko con ID " + funko.id + "."),
+      );
       return false;
     }
     fs.writeFileSync(filePath, JSON.stringify(funko.toJSON(), null, 2));
-    console.log(chalk.green('Funko ' + funko.name + ' actualizado con éxito.'));
+    console.log(chalk.green("Funko " + funko.name + " actualizado con éxito."));
     return true;
   }
 
@@ -66,11 +66,13 @@ export class FunkoManager {
   deleteFunko(id: number): boolean {
     const filePath = this.getFunkoFilePath(id);
     if (!fs.existsSync(filePath)) {
-      console.log(chalk.red('Error: No se encontró el Funko con ID ' + id + '.'));
+      console.log(
+        chalk.red("Error: No se encontró el Funko con ID " + id + "."),
+      );
       return false;
     }
     fs.unlinkSync(filePath);
-    console.log(chalk.green('Funko con ID ' + id + ' eliminado.'));
+    console.log(chalk.green("Funko con ID " + id + " eliminado."));
     return true;
   }
 
@@ -94,19 +96,26 @@ export class FunkoManager {
 
   /**
    * Nos proporciona toda la información de un funko mediante su id
-   * @param id - number 
-   * @returns Funko | null 
+   * @param id - number
+   * @returns Funko | null
    */
   getFunko(id: number): Funko | null {
     const filePath = this.getFunkoFilePath(id);
     if (!fs.existsSync(filePath)) {
-      console.log(chalk.red('Error: No se encontró el Funko con ID ' + id + '.'));
+      console.log(
+        chalk.red("Error: No se encontró el Funko con ID " + id + "."),
+      );
       return null;
     }
     const data = JSON.parse(fs.readFileSync(filePath, "utf-8")) as FunkoData;
     return Funko.fromJSON(data);
   }
 
+  /**
+   * Obtenemos la ruta de donde se ubica el funko
+   * @param id - id del funko
+   * @returns string
+   */
   private getFunkoFilePath(id: number): string {
     return path.join(this.userDir, `${id}.json`);
   }
