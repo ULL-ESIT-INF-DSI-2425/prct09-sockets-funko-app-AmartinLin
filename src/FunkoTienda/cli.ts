@@ -16,7 +16,6 @@ export function sendCommand(command: string, callback: (respuesta: string) => vo
   });
 
   client.on("end", () => {
-    // Procesamos el contenido acumulado al final de la conexión
     try {
       // Intentamos parsear como JSON
       const jsonStart = wholeData.indexOf("{");
