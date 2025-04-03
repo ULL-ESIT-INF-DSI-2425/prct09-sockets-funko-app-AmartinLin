@@ -1,2 +1,35 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/qsam7Uxz)
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=18874392)
+# Práctica FunkoTienda cliente-servidor
+En esta práctica se implementa un modelo de tienda de funkos cliente-servidor en donde los funkos se almacenan en el mismo sistema de ficheros que el resto del código. A continuación se explica cada parte del programa y como iniciarlo para que supere los test, además de ejecutarlo para un funcionamiento normal.
+## Funko.ts
+Aquí se define la forma de los funkos y su almacenaje en los ficheros JSON, además de definirse las funciones para extraer el funko de un JSON y transformar un funko a JSON. Los funkos tiene 2 parametros que son enumerados ya que se necesitan valores estáticos (no nos vale cualquier valor):
+``` typescript
+export enum FunkoType {
+  POP = "Pop!",
+  POP_RIDES = "Pop! Rides",
+  VYNIL_SODA = "Vynil Soda",
+  VYNIL_GOLD = "Vynil Gold",
+}
+
+export enum FunkoGenre {
+  ANIMATION = "Animación",
+  MOVIES_TV = "Películas y TV",
+  VIDEO_GAMES = "Videojuegos",
+  SPORTS = "Deportes",
+  MUSIC = "Música",
+  ANIME = "Ánime",
+}
+```
+## FunkoManager.ts
+En este fichero se implementa toda la lógica para manejar la tienda. Aquí se indica donde se ha de buscar, actualizar y añadir los funkos, por lo que hay que prestar atención a este fichero a la hora de ejecutar los test en máquinas externas (como es el caso de las GitHub actions). 
+En forma de comentarios se ha colocado una forma de direccionar las rutas mediante URLs pero se ha prescindido de ellas por dificultar la lectura del código y de fallar algunos test debido a una mala referencia a los archivos. 
+> NOTE: para cambiar el directorio de pruebas para las GitHub actions se ha de invertir el valor del booleano `testing`: 
+```typescript
+export class FunkoManager {
+  private userDir: string;
+
+  constructor(private username: string) {
+    const testing = true; // <- valor a cambiar para test (máquinas externas)
+    if (testing) {
+  ...
+```
+## FunkoController.ts

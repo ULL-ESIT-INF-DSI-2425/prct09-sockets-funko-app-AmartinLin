@@ -1,6 +1,5 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-//import { executeCommand } from "./funkoController.js";
 import net from "net";
 import chalk from "chalk";
 
