@@ -33,3 +33,38 @@ export class FunkoManager {
   ...
 ```
 ## FunkoController.ts
+Se define una única funcion que se encarga de ejecutar los comandos necesarios de funkoManager tras introducir un comando en la consola. Se recibe el nombre del usuario que ejecutó el comando, el comando en sí y los argumentos. 
+> NOTE: Se utiliza chalk para informar de manera visual los errores y ejecuciones
+## server.ts
+Implementación del servidor encargado de administrar los funkos mediante los comandos de Funkomanager. Se crea un servidor conectado a un socket dado (por defecto 60300). 
+## cli.ts
+Código que implementa tanto el manejo de inputs por linea de comandos (yargs), como una función encargada de ejecutar los comandos solicitados `sendComand`. Dicha funcion crea una conección (socket con el puerto 60300). Nótese la implementación a la hora de recolectar toda la información y esta solo se envía al servidor una vez la conección termina: 
+```typescript
+...
+let wholeData = "";
+
+  client.on("data", (dataChunk) => {
+    wholeData += dataChunk.toString(); // Acumulamos todos los fragmentos
+  });
+
+  client.on("end", () => {
+    try {
+      // Intentamos parsear como JSON
+      const jsonStart = wholeData.indexOf("{");
+      if (jsonStart !== -1) {
+        const jsonData = wholeData.slice(jsonStart).trim(); // Aislamos la parte JSON
+        const message = JSON.parse(jsonData);
+        callback(`${JSON.stringify(message, null, 2)}`); 
+      } else {
+        callback(`${wholeData.trim()}`);
+      }
+    } catch (error) {
+      console.error("Error al procesar la respuesta:", error);
+      console.error("Datos recibidos:", wholeData);
+    }
+  });
+...
+```
+> NOTE: se ha desabilitado la condición `no-unused-vars` del compilador de typescript en la constante argv ya que no se utiliza en el mismo código pero sí para la recolección del comando que introduce el cliente.
+## client.ts
+Implementación de un cliente el cual no se desconecta una vez realizada la petición, si no que permanece con el canal abierto. **Esta implementación no forma parte de la práctica 9, si no que es parte de experimentación de la misma**.
