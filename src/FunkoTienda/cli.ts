@@ -3,7 +3,10 @@ import { hideBin } from "yargs/helpers";
 import net from "net";
 import chalk from "chalk";
 
-export function sendCommand(command: string, callback: (respuesta: string) => void) {
+export function sendCommand(
+  command: string,
+  callback: (respuesta: string) => void,
+) {
   const client = net.createConnection({ port: 60300 }, () => {
     client.write(command);
   });
@@ -21,7 +24,7 @@ export function sendCommand(command: string, callback: (respuesta: string) => vo
       if (jsonStart !== -1) {
         const jsonData = wholeData.slice(jsonStart).trim(); // Aislamos la parte JSON
         const message = JSON.parse(jsonData);
-        callback(`${JSON.stringify(message, null, 2)}`); 
+        callback(`${JSON.stringify(message, null, 2)}`);
       } else {
         callback(`${wholeData.trim()}`);
       }
@@ -36,7 +39,6 @@ export function sendCommand(command: string, callback: (respuesta: string) => vo
   });
 }
 
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const argv = yargs(hideBin(process.argv))
   .option("user", {
@@ -50,16 +52,20 @@ const argv = yargs(hideBin(process.argv))
     "Obtener información de un Funko",
     (yargs) => yargs.positional("id", { type: "number", demandOption: true }),
     (args) => {
-      sendCommand(`get ${args.user} ${args.id}`, (response) => console.log(response));
-    }
+      sendCommand(`get ${args.user} ${args.id}`, (response) =>
+        console.log(response),
+      );
+    },
   )
   .command<{ user: string; id: number }>(
     "remove <id>",
     "Eliminar un Funko",
     (yargs) => yargs.positional("id", { type: "number", demandOption: true }),
     (args) => {
-      sendCommand(`remove ${args.user} ${args.id}`, (response) => console.log(response));
-    }
+      sendCommand(`remove ${args.user} ${args.id}`, (response) =>
+        console.log(response),
+      );
+    },
   )
   .command<{
     user: string;
@@ -91,9 +97,9 @@ const argv = yargs(hideBin(process.argv))
     (args) => {
       sendCommand(
         `add ${args.user} ${args.id} ${args.nombre} ${args.descripcion} ${args.tipo} ${args.genero} ${args.franquicia} ${args.numero} ${args.exclusivo} ${args.especial} ${args.valor}`,
-        (response) => console.log(response)
+        (response) => console.log(response),
       );
-    }
+    },
   )
   .command<{ user: string }>(
     "list",
@@ -101,7 +107,7 @@ const argv = yargs(hideBin(process.argv))
     (yargs) => yargs,
     (args) => {
       sendCommand(`list ${args.user}`, (response) => console.log(response));
-    }
+    },
   )
   .demandCommand()
   .help().argv;
