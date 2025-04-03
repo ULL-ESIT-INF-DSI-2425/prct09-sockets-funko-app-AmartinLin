@@ -10,18 +10,8 @@ const client = net.createConnection({ port: 60300 }, () => {
   console.log("Conectado al servidor");
 });
 
-let allData = "";
 client.on("data", (data) => {
-  allData += data;
-  console.log("alldata", allData.toString());
-  if (allData.indexOf("Bienvenido. P") !== -1) {
-    console.log(allData.toString());
-    allData = "";
-  } else {
-    while (allData.indexOf("\n") !== -1) {
-      allData += data;
-    }
-  }
+  console.log(data.toString());
   rl.question("> ", (input) => client.write(input));
 });
 
